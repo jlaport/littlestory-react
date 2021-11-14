@@ -1,24 +1,67 @@
-import logo from './logo.svg';
-import './App.css';
-
+import React, { useState, useEffect } from "react";
+import "./App.css";
+import Header from "./Components/Header";
+import Footer from "./Components/Footer";
+import Products from "./Components/Products";
+import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import CartPage from "./Components/CartPage";
+import Checkout from "./Components/Checkout";
 function App() {
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    fetch("http://localhost:4000/products")
+      .then((response) => response.json())
+      .then((data) => {
+        setHasError(false);
+        setProducts(data);
+      })
+      .catch((e) => {
+        setHasError(true);
+      });
+  }, []);
+
+  const [products, setProducts] = useState([]);
+
+  const [cart, setCart] = useState({});
+
+  function addToCart(id) {
+    const newCart = { ...cart, [id]: cart[id] ? cart[id] + 1 : 1 };
+    setCart(newCart);
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div>
+        <Header cart={cart} />
+        <main>
+          {hasError ? (
+            <h1>Error no se pudo cargar</h1>
+          ) : products.length == 0 ? (
+            <h1>Cargando...</h1>
+          ) : (
+            <Switch>
+              <Route path="/cart">
+                <CartPage
+                  onCartChange={setCart}
+                  products={products}
+                  cart={cart}
+                />
+              </Route>
+
+              <Route path="/checkout">
+                <Checkout />
+              </Route>
+
+              <Route path="/">
+                <Products products={products} addToCart={addToCart} />
+              </Route>
+            </Switch>
+          )}
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
