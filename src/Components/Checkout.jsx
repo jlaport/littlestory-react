@@ -3,9 +3,13 @@ import * as validate from "../js/Validate";
 
 export default function Checkout() {
   const [email, setEmail] = useState("");
+
   const [password, setPassword] = useState("");
+
   const [emailError, setEmailError] = useState("");
+
   const [passwordError, setPasswordError] = useState("");
+
   const [Ok, setOk] = useState(false);
 
   const validateSignIn = () => {
@@ -46,7 +50,6 @@ export default function Checkout() {
           onChange={(e) => setPassword(e.target.value)}
           value={password}
         />
-        <br />
 
         {passwordError && <p className="error">Contraseña incorrecta</p>}
 

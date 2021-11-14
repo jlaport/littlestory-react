@@ -132,7 +132,9 @@ select:hover {
   padding: 10px;
 }
 
-
+.error{
+  color: red;
+}
 
 #buybutton {
   float: right;
