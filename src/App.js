@@ -5,12 +5,13 @@ import Footer from "./Components/Footer";
 import Products from "./Components/Products";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CartPage from "./Components/CartPage";
-import Checkout from "./Components/Checkout";
+import Login from "./Components/Login";
+import NewUser from "./Components/NewUser";
 function App() {
   const [hasError, setHasError] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:4000/products")
+    fetch("http://localhost:8020/products")
       .then((response) => response.json())
       .then((data) => {
         setHasError(false);
@@ -20,6 +21,8 @@ function App() {
         setHasError(true);
       });
   }, []);
+
+  const [user, setUser] = useState();
 
   const [products, setProducts] = useState([]);
 
@@ -33,7 +36,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Header cart={cart} />
+        <Header cart={cart} user={user} />
         <main>
           {hasError ? (
             <h1>Error no se pudo cargar</h1>
@@ -46,11 +49,16 @@ function App() {
                   onCartChange={setCart}
                   products={products}
                   cart={cart}
+                  user={user}
                 />
               </Route>
 
-              <Route path="/checkout">
-                <Checkout />
+              <Route path="/newuser">
+                <NewUser />
+              </Route>
+
+              <Route path="/login">
+                <Login setUser={setUser} />
               </Route>
 
               <Route path="/">

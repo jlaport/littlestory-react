@@ -2,7 +2,7 @@ import React from "react";
 import CartProduct from "./CartProduct";
 import { Link } from "react-router-dom";
 
-export default function CartPage({ cart, products, onCartChange }) {
+export default function CartPage({ cart, products, onCartChange, user }) {
   let total = 0;
   let cartIds = Object.keys(cart);
   let cartProducts = products.filter((product) => {
@@ -40,11 +40,9 @@ export default function CartPage({ cart, products, onCartChange }) {
         <span id="total"> ${total}</span>
       </div>
 
-      <Link to="/Checkout">
-        <button id="buybutton" className="button">
-          Comprar
-        </button>
-      </Link>
+      <button id="buybutton" className="button" disabled={!user}>
+        Comprar
+      </button>
     </main>
   );
 }

@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-export default function Header({ cart }) {
+export default function Header({ cart, user }) {
   let cartTotal = Object.keys(cart).length;
 
   return (
@@ -11,6 +11,10 @@ export default function Header({ cart }) {
       </a>
 
       <ul>
+        <Link to="/Login">
+          <li className="nav-item">{user ? user.name : "Ingresar"}</li>
+        </Link>
+
         <Link to="/">
           <li className="nav-item">Inicio</li>
         </Link>

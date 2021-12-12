@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import * as validate from "../js/Validate";
+import { Link } from "react-router-dom";
 
-export default function Checkout() {
+export default function Login({ setUser }) {
   const [email, setEmail] = useState("");
 
   const [password, setPassword] = useState("");
@@ -11,6 +12,28 @@ export default function Checkout() {
   const [passwordError, setPasswordError] = useState("");
 
   const [Ok, setOk] = useState(false);
+
+  const handleSubmit = (event) => {
+    fetch("http://localhost:8020/users/auth", {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ email, password }),
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (!data.error) {
+          setUser(data);
+        }
+        console.log(data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    event.preventDefault();
+  };
 
   const validateSignIn = () => {
     validate.validateEmail(email) || validate.validatePassword(password)
@@ -25,10 +48,10 @@ export default function Checkout() {
   };
 
   return (
-    <div id="checkOutContainer">
+    <div id="LoginContainer">
       <h2>Debe ingresar su usuario para finalizar la compra.</h2>
 
-      <form>
+      <form onSubmit={handleSubmit}>
         <h3>Correo electronico</h3>
 
         <input
@@ -53,17 +76,15 @@ export default function Checkout() {
 
         {passwordError && <p className="error">Contraseña incorrecta</p>}
 
-        <button
-          className="button"
-          type="button"
-          onClick={() => validateSignIn()}
-        >
-          Finalizar compra
+        <button className="button" onClick={() => validateSignIn()}>
+          Ingresar
         </button>
 
-        {Ok && (
-          <p className="correct">Compra finalizada {email}. Muchas gracias!</p>
-        )}
+        <Link to="/newuser">
+          <button className="button" type="button">
+            Nuevo usuario
+          </button>
+        </Link>
       </form>
     </div>
   );

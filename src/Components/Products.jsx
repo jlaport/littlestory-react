@@ -3,10 +3,10 @@ import Product from "./Product";
 
 export default function Products({ addToCart, products }) {
   const [filter, setFilter] = useState("");
-
-  const filterProducts = products.filter(
+  const filteredProducts = products.filter(
     (product) => product.category == filter || filter == ""
   );
+  const categories = [...new Set(products.map((product) => product.category))];
 
   return (
     <div>
@@ -15,20 +15,14 @@ export default function Products({ addToCart, products }) {
 
         <select value={filter} onChange={(e) => setFilter(e.target.value)}>
           <option value="">Todos</option>
-          <option value="juguetes">Juguetes</option>
-          <option value="mordillos">Mordillos</option>
-          <option value="baberos">Baberos</option>
-          <option value="muselinas">Muselinas</option>
-          <option value="portachupetes">Portachupetes</option>
-          <option value="chuprtes">Chupetes</option>
-          <option value="vasos">Vasos</option>
-          <option value="rebozos">Rebozos</option>
-          <option value="platos">Platos</option>
+          {categories.map((category) => (
+            <option key={category}>{category}</option>
+          ))}
         </select>
       </div>
 
       <div className="products">
-        {filterProducts.map((product) => (
+        {filteredProducts.map((product) => (
           <Product key={product.id} data={product} addToCart={addToCart} />
         ))}
       </div>
