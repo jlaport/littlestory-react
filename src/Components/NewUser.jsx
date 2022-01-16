@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import * as validate from "../js/Validate";
-import { Link } from "react-router-dom";
+import md5 from "md5";
 
 export default function NewUser() {
   const [email, setEmail] = useState("");
@@ -11,11 +11,11 @@ export default function NewUser() {
 
   const [passwordError, setPasswordError] = useState("");
 
-  const [Ok, setOk] = useState(false);
-
   const [name, setName] = useState("");
 
   const [address, setAddress] = useState("");
+
+  const [Ok, setOk] = useState(false);
 
   const handleSubmit = (event) => {
     fetch("http://localhost:8020/users", {
@@ -24,12 +24,24 @@ export default function NewUser() {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
-      body: JSON.stringify({ name, address, email, password }),
+      body: JSON.stringify({ name, address, email, password}),
     })
       .then((response) => response.json())
       .then((data) => {})
       .catch((e) => {});
     event.preventDefault();
+  };
+
+  const validateUser = () => {
+    validate.validateEmail(email) || validate.validatePassword(password)
+      ? setOk(false)
+      : setOk(true);
+    userUpdate();
+  };
+
+  const userUpdate = () => {
+    setPasswordError(validate.validatePassword(password));
+    setEmailError(validate.validateEmail(email));
   };
 
   return (
@@ -58,7 +70,7 @@ export default function NewUser() {
         name="password"
         placeholder="Contraseña"
         onChange={(e) => setPassword(e.target.value)}
-        value={password}
+        value={md5(password)}
         required
       />
 
@@ -72,7 +84,7 @@ export default function NewUser() {
         required
       />
 
-      <button className="button">Crear usuario</button>
+      <button className="button" onClick={() => validateUser()}>Crear usuario</button>
     </form>
   );
 }

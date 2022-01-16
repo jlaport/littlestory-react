@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import * as validate from "../js/Validate";
 import { Link } from "react-router-dom";
+import md5 from "md5";
 
 export default function Login({ setUser }) {
   const [email, setEmail] = useState("");
@@ -27,7 +28,6 @@ export default function Login({ setUser }) {
         if (!data.error) {
           setUser(data);
         }
-        console.log(data);
       })
       .catch((e) => {
         console.log(e);
@@ -49,7 +49,7 @@ export default function Login({ setUser }) {
 
   return (
     <div id="LoginContainer">
-      <h2>Debe ingresar su usuario para finalizar la compra.</h2>
+      <h2>Debe ingresar su usuario para poder realizar una compra.</h2>
 
       <form onSubmit={handleSubmit}>
         <h3>Correo electronico</h3>

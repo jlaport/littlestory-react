@@ -1,6 +1,5 @@
 import React from "react";
 import CartProduct from "./CartProduct";
-import { Link } from "react-router-dom";
 
 export default function CartPage({ cart, products, onCartChange, user }) {
   let total = 0;
